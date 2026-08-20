@@ -538,6 +538,8 @@ namespace esphome
             case NonNasaFanspeed::Fresh:
             case NonNasaFanspeed::High:
                 return 160;
+            case NonNasaFanspeed::Turbo:
+                return 224;
             default:
                 return 0; // Auto
             }
@@ -661,6 +663,8 @@ namespace esphome
                 return NonNasaFanspeed::Medium;
             case FanMode::Low:
                 return NonNasaFanspeed::Low;
+            case FanMode::Turbo:
+                return NonNasaFanspeed::Turbo;
             case FanMode::Auto:
             default:
                 return NonNasaFanspeed::Auto;
@@ -754,6 +758,8 @@ namespace esphome
                 return FanMode::Mid;
             case NonNasaFanspeed::Low:
                 return FanMode::Low;
+            case NonNasaFanspeed::Turbo:
+                return FanMode::Turbo;
             default:
             case NonNasaFanspeed::Auto:
                 return FanMode::Auto;
