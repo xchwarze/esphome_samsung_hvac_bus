@@ -2,6 +2,7 @@
 #include <map>
 #include <cmath>
 #include <string>
+#include <inttypes.h>
 #include "esphome/core/hal.h"
 #include "util.h"
 #include "log.h"
@@ -122,7 +123,7 @@ namespace esphome
             {
                 if (debug_log_messages)
                 {
-                    LOGW("Cmd8D: Large time delta detected (%u ms, ~%.1f hours), capping to 1 hour", delta_ms, delta_ms / 3600000.0f);
+                    LOGW("Cmd8D: Large time delta detected (%" PRIu32 " ms, ~%.1f hours), capping to 1 hour", delta_ms, delta_ms / 3600000.0f);
                 }
                 delta_ms = MAX_DELTA_MS; // Cap to 1 hour
             }
@@ -852,13 +853,13 @@ namespace esphome
                         log_should_print(log_dedup_key(nonpacket_.src, "nonnasa", 0x0020), (double)sig, 0.0, 0))
                     {
 
-                        LOGI("Cmd20 received: src=%s, wind_direction=%d, target_temp=%d, power=%d, mode=%d, fanspeed=%d",
-                             nonpacket_.src.c_str(),
-                             (uint8_t)nonpacket_.command20.wind_direction,
-                             nonpacket_.command20.target_temp,
-                             nonpacket_.command20.power,
-                             (uint8_t)nonpacket_.command20.mode,
-                             (uint8_t)nonpacket_.command20.fanspeed);
+                        LOGI("Cmd20 received: src=%s, wind_direction=%u, target_temp=%s, power=%u, mode=%u, fanspeed=%u",
+                            nonpacket_.src.c_str(),
+                            static_cast<unsigned>(nonpacket_.command20.wind_direction),
+                            nonpacket_.command20.target_temp.to_string().c_str(),
+                            static_cast<unsigned>(nonpacket_.command20.power),
+                            static_cast<unsigned>(nonpacket_.command20.mode),
+                            static_cast<unsigned>(nonpacket_.command20.fanspeed));
                     }
                 }
 
