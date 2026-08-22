@@ -538,6 +538,8 @@ namespace esphome
             case NonNasaFanspeed::Fresh:
             case NonNasaFanspeed::High:
                 return 160;
+            case NonNasaFanspeed::Turbo:
+                return 224;
             default:
                 return 0; // Auto
             }
@@ -661,6 +663,8 @@ namespace esphome
                 return NonNasaFanspeed::Medium;
             case FanMode::Low:
                 return NonNasaFanspeed::Low;
+            case FanMode::Turbo:
+                return NonNasaFanspeed::Turbo;
             case FanMode::Auto:
             default:
                 return NonNasaFanspeed::Auto;
@@ -754,6 +758,8 @@ namespace esphome
                 return FanMode::Mid;
             case NonNasaFanspeed::Low:
                 return FanMode::Low;
+            case NonNasaFanspeed::Turbo:
+                return FanMode::Turbo;
             default:
             case NonNasaFanspeed::Auto:
                 return FanMode::Auto;
@@ -970,6 +976,12 @@ namespace esphome
                     LOGW("s:%s d:%s CmdF0 outdoor_unit_error_code %d", nonpacket_.src.c_str(), nonpacket_.dst.c_str(), error_code);
                 }
                 target->set_error_code(nonpacket_.src, error_code);
+
+                target->set_custom_sensor(nonpacket_.src, 0xF005, (float)nonpacket_.commandF0.inverter_order_frequency_hz);
+                target->set_custom_sensor(nonpacket_.src, 0xF006, (float)nonpacket_.commandF0.inverter_target_frequency_hz);
+                target->set_custom_sensor(nonpacket_.src, 0xF007, (float)nonpacket_.commandF0.inverter_current_frequency_hz);
+                target->set_custom_sensor(nonpacket_.src, 0xF004, nonpacket_.commandF0.outdoor_unit_defrost_control ? 1.0f : 0.0f);
+                target->set_custom_sensor(nonpacket_.src, 0xF008, (float)nonpacket_.commandF0.outdoor_unit_bldc_fan);
             }
             else if (nonpacket_.cmd == NonNasaCommand::CmdC6)
             {
